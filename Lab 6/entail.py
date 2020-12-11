@@ -1,61 +1,45 @@
-# Create a knowledge base using prepositional logic and show that
-# the given query entails the knowledge base or not
-
-# Truth Table
 combinations=[(True,True, True),(True,True,False),(True,False,True),(True,False, False),(False,True, True),(False,True, False),(False, False,True),(False,False, False)]
-variable={'a':0,'b':1, 'c':2}
+variable={'p':0,'q':1, 'r':2}
 kb=''
 q=''
 priority={'~':3,'v':1,'^':2}
-
-
 def input_rules():
     global kb, q
-    kb = (input("Knowledge base : "))
-    q = input("Query : ")
-
-
+    kb = (input("Enter rule: "))
+    q = input("Enter the Query: ")
 def entailment():
     global kb, q
-    print(''*10+"Truth Table Reference"+''*10)
-    print('kb    α')
-    print('-'*10)
+    print('*'*10+"Truth Table Reference"+'*'*10)
+    print('kb','alpha')
+    print('*'*10)
     for comb in combinations:
         s = evaluatePostfix(toPostfix(kb), comb)
         f = evaluatePostfix(toPostfix(q), comb)
-        print(s,  f)
-        if s is True and f is False:
+        print(s, f)
+        print('-'*10)
+        if s and not f:
             return False
     return True
-
-
 def isOperand(c):
     return c.isalpha() and c!='v'
-
 
 def isLeftParanthesis(c):
     return c == '('
 
-
 def isRightParanthesis(c):
     return c == ')'
-
 
 def isEmpty(stack):
     return len(stack) == 0
 
-
 def peek(stack):
     return stack[-1]
-
 
 def hasLessOrEqualPriority(c1, c2):
     try:
         return priority[c1]<=priority[c2]
     except KeyError:
         return False
-
-
 def toPostfix(infix):
     stack = []
     postfix = ''
@@ -76,10 +60,8 @@ def toPostfix(infix):
                 stack.append(c)
     while (not isEmpty(stack)):
         postfix += stack.pop()
-
+    
     return postfix
-
-
 def evaluatePostfix(exp, comb):
     stack = []
     for i in exp:
@@ -93,29 +75,21 @@ def evaluatePostfix(exp, comb):
             val2 = stack.pop()
             stack.append(_eval(i,val2,val1))
     return stack.pop()
-
-
 def _eval(i, val1, val2):
-    if i == '^':
+    if i == '^': 
         return val2 and val1
     return val2 or val1
-
-
 #Test 1
 input_rules()
 ans = entailment()
 if ans:
     print("The Knowledge Base entails query")
-    print(" KB |= α ")
 else:
     print("The Knowledge Base does not entail query")
-print("\n")
-
 #Test 2
 input_rules()
 ans = entailment()
 if ans:
     print("The Knowledge Base entails query")
-    print(" KB |= α ")
 else:
     print("The Knowledge Base does not entail query")
